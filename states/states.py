@@ -17,14 +17,11 @@ def update_dialog_stack(left: list[str], right: Optional[str]) -> list[str]:
 class State(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
     user_info: str
-    dialog_state: Annotated[
+    dialog_state: Annotated[ #To keep track of the current agent being used
         list[
             Literal[
-                "assistant",
-                "update_flight",
-                "book_car_rental",
-                "book_hotel",
-                "book_excursion",
+                "assistant", #primary assistant
+                "generate_recommendations", #recommendations assistant
             ]
         ],
         update_dialog_stack,

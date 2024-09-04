@@ -1,6 +1,6 @@
 from typing import Callable
-
 from langchain_core.messages import ToolMessage
+from states.states import State
 
 
 def create_entry_node(assistant_name: str, new_dialog_state: str) -> Callable:
@@ -11,7 +11,6 @@ def create_entry_node(assistant_name: str, new_dialog_state: str) -> Callable:
                 ToolMessage(
                     content=f"The assistant is now the {assistant_name}. Reflect on the above conversation between the host assistant and the user."
                     f" The user's intent is unsatisfied. Use the provided tools to assist the user. Remember, you are {assistant_name},"
-                    " and the booking, update, other other action is not complete until after you have successfully invoked the appropriate tool."
                     " If the user changes their mind or needs help for other tasks, call the CompleteOrEscalate function to let the primary host assistant take control."
                     " Do not mention who you are - just act as the proxy for the assistant.",
                     tool_call_id=tool_call_id,
