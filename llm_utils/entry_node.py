@@ -1,6 +1,6 @@
 from typing import Callable
 from langchain_core.messages import ToolMessage
-from states.states import State
+from states.state import State
 
 
 def create_entry_node(assistant_name: str, new_dialog_state: str) -> Callable:
