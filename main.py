@@ -1,10 +1,6 @@
-from dotenv import load_dotenv
-load_dotenv('.env')
+from agent_graph.graph import graph_factory, compile_workflow
 
-from agent_graph.graph import compile_graph, create_graph
+builder = graph_factory()
+graph = compile_workflow(builder)
 
-graph = create_graph()
-workflow = compile_graph(graph)
-
-query = {'messages':'Hi! what is your name?'}
-result = workflow.invoke(query)
+#run graph here
