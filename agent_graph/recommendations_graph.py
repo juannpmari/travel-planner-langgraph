@@ -11,7 +11,9 @@ from llm_utils.entry_node import create_entry_node
 from states.state import State    
 from langchain.schema import FunctionMessage
 
-from tools.web_searcher import get_web_searcher
+from tools.recommendation_tools.web_searcher import get_web_searcher
+from tools.recommendation_tools.providers_data import get_provider_data
+
 
 # Subgraph correponding to the recommendations assistant
 
@@ -25,7 +27,7 @@ def create_recommendations_subgraph(builder):
     builder.add_edge("enter_generate_recommendations", "generate_recommendations")
     builder.add_node(
         "generate_recommendations_tools",
-        create_tool_node_with_fallback([get_web_searcher()]),
+        create_tool_node_with_fallback([get_web_searcher(),get_provider_data]),
     )
 
 
