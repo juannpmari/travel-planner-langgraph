@@ -19,6 +19,7 @@ def get_primary_assistant_runnable():
     )
 
     primary_assistant_tools = [
+        #TODO: add tool to call human
     ]
 
     assistant_runnable = primary_assistant_prompt | llm.bind_tools(

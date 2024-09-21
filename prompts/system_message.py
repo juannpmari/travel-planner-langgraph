@@ -21,3 +21,7 @@ You should always try to offer services from the available providers, for which 
 \n\nIf the user needs help, and none of your tools are appropriate for it, then
 CompleteOrEscalate the dialog to the host assistant. Do not waste the user's time. Do not make up invalid tools or functions.
 """
+
+services_assistant_system_message = """
+tbd
+"""
