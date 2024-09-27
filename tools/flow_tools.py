@@ -3,10 +3,27 @@ from pydantic import BaseModel, Field
 
 class ToRecommendationsAssistant(BaseModel):
     """Transfers work to a specialized assistant to handle generating recommendations for the user's trip."""
-
+    
+    #TODO: what is this?
     request: str = Field(
         description="Any necessary followup questions the recommendations assistant should clarify before proceeding."
     )
+
+class ToServicesAssistant(BaseModel):
+    """Transfers work to a specialized assistant to handle user queries related to specific services and providers."""
+
+    request: str = Field(
+        description="Any necessary followup questions the services assistant should clarify before proceeding."
+    )
+
+class ToAccomodationAssistant(BaseModel):
+    """Transfers work to a specialized assistant to handle user queries related to accomodation providers at destination."""
+
+    request: str = Field(
+        description="Any necessary followup questions the accomodation assistant should clarify before proceeding."
+    )
+
+
 
 
 class CompleteOrEscalate(BaseModel):
