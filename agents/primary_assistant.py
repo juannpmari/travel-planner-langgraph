@@ -1,7 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 from models.openai import get_openai
-from tools.flow_tools import ToRecommendationsAssistant
+from tools.flow_tools import ToRecommendationsAssistant, ToServicesAssistant
 from prompts.system_message import primary_assistant_system_message
 
 def get_primary_assistant_runnable():
@@ -24,7 +24,7 @@ def get_primary_assistant_runnable():
 
     assistant_runnable = primary_assistant_prompt | llm.bind_tools(
         primary_assistant_tools
-        + [ToRecommendationsAssistant]
+        + [ToRecommendationsAssistant, ToServicesAssistant]
     )
 
     return assistant_runnable

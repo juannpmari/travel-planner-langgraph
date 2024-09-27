@@ -2,7 +2,7 @@
 from typing import Literal
 from agent_graph.common import pop_dialog_state
 from agents.assistant import Assistant
-from agents.primary_assistant import ToRecommendationsAssistant, get_primary_assistant_runnable
+from agents.primary_assistant import ToRecommendationsAssistant, ToServicesAssistant, get_primary_assistant_runnable
 from langgraph.graph import StateGraph,END,START
 from llm_utils.utils import create_tool_node_with_fallback
 from states.state import State
@@ -24,7 +24,8 @@ def create_primary_graph():
         state: State,
     ) -> Literal[
         "primary_assistant_tools",
-        "enter_generate_recommendations"
+        "enter_generate_recommendations",
+        "enter_services_assistant",
         "__end__",
     ]:
         route = tools_condition(state)
@@ -34,6 +35,8 @@ def create_primary_graph():
         if tool_calls:
             if tool_calls[0]["name"] == ToRecommendationsAssistant.__name__:
                 return "enter_generate_recommendations"
+            if tool_calls[0]["name"] == ToServicesAssistant.__name__:
+                return "enter_services_assistant"
             return "primary_assistant_tools"
         raise ValueError("Invalid route")
 
