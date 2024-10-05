@@ -18,7 +18,7 @@ def get_recommendations_runnable():
     llm = get_openai()
 
     generate_recommendations_tools = [get_web_searcher()]
-    generate_recommendations_runnable = recommendation_generator_prompt | llm.bind_tools(
+    generate_recommendations_runnable = recommendation_generator_prompt | llm.bind_tools( #TODO: check .bind_tools vs llm-invoke(functions=...)
         generate_recommendations_tools + [CompleteOrEscalate]
     )
     return generate_recommendations_runnable

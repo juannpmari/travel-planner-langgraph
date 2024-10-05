@@ -26,7 +26,7 @@ def create_primary_graph():
         "primary_assistant_tools",
         "enter_generate_recommendations",
         "enter_services_assistant",
-        "__end__",
+        "__end__", #END
     ]:
         route = tools_condition(state)
         if route == END:
@@ -66,7 +66,7 @@ def create_primary_graph():
         "services_assistant"
     ]:
         """If we are in a delegated state, route directly to the appropriate assistant."""
-        dialog_state = state.get("dialog_state")
+        dialog_state = state.get("dialog_state") #TODO: Get dialog_states from enum
         if not dialog_state:
             return "primary_assistant"
         return dialog_state[-1]
@@ -78,19 +78,3 @@ def create_primary_graph():
     builder.add_edge("leave_skill", "primary_assistant")
 
     return builder
-
-    
-
-# Compile graph
-
-#memory = MemorySaver()
-#part_4_graph = builder.compile(
- #   checkpointer=memory,
-    # Let the user approve or deny the use of sensitive tools
-  #  interrupt_before=[
-  #      "update_flight_sensitive_tools",
-  #      "book_car_rental_sensitive_tools",
-  #      "book_hotel_sensitive_tools",
-  #      "book_excursion_sensitive_tools",
-  #  ],
-#)
