@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Annotated, Literal, Optional
 
 from typing_extensions import TypedDict
@@ -20,9 +21,13 @@ class State(TypedDict):
     dialog_state: Annotated[ #To keep track of the current agent being used
         list[
             Literal[
-                "assistant", #primary assistant
+                "primary_assistant", #primary assistant
                 "generate_recommendations", #recommendations assistant
             ]
         ],
         update_dialog_stack,
     ]
+
+
+class DialogStateEnum(Enum): #TODO: complete this
+    PRIMARY_ASSISTANT = "primary_assistant"
