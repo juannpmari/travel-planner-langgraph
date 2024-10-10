@@ -20,8 +20,6 @@ class Assistant:
             ):
                 messages = state["messages"] + [("user", "Respond with a real output.")]
                 state = {**state, "messages": messages}
-                messages = state["messages"] + [("user", "Respond with a real output.")]
-                state = {**state, "messages": messages}
             else:
                 break
         return {"messages": result}

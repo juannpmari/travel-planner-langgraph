@@ -1,5 +1,4 @@
 from langchain_core.prompts import ChatPromptTemplate
-from pydantic import BaseModel, Field
 from models.openai import get_openai
 from tools.flow_tools import ToRecommendationsAssistant, ToServicesAssistant
 from prompts.system_message import primary_assistant_system_message

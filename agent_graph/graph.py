@@ -20,9 +20,10 @@ def compile_workflow(builder):
 
     graph = builder.compile(
     checkpointer=memory,
-    interrupt_before=[
-        "generate_recommendations_tools"
-    ],
+    # interrupt_before=[ #TODO: check if this is necessary
+    #     "generate_recommendations_tools",
+    #     "services_assistant_tools"
+    # ],
     )
 
     return graph
