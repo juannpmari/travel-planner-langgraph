@@ -1,4 +1,7 @@
 import json
+import os
+
+import requests
 import azure.functions as func
 
 import logging
@@ -36,10 +39,11 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
         # # Parse the incoming message from WhatsApp
         req_body = req.get_json()
-        message = req_body['messages'][0]['text']['body']
+        message = req_body['entry'][0]['changes'][0]['value']['messages'][0]
+        message_body = message['text']['body']
         
         try:
-            response = get_response(message)
+            lgph_response = get_response(message_body)
         except Exception as e:
             logger.info(f"Error {e}")
             response_payload = {
@@ -47,13 +51,18 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
             }
             return func.HttpResponse(json.dumps(response_payload), mimetype="application/json", status_code=500)
   
+        data = get_text_message_input(
+            recipient=os.getenv('RECIPIENT_WAID'), text = lgph_response
+        )
+
+        wpp_response = send_message(data)
 
         response_payload = {
             "recipient_type": "individual",
-            "to": req_body['messages'][0]['from'],
+            "to": message['from'],
             "type": "text",
             "text": {
-                "body": response
+                "body": wpp_response.json()
             }
         }
 
@@ -102,3 +111,35 @@ def get_response(message):
         agent_response = str(event.get('messages')[-1].content)
 
     return agent_response
+
+
+def get_text_message_input(recipient, text):
+    return json.dumps(
+        {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": recipient,
+            "type": "text",
+            "text": {"preview_url": False, "body": text},
+        }
+    )
+
+
+def send_message(data):
+    headers = {
+        "Content-type": "application/json",
+        "Authorization": f"Bearer {os.getenv('ACCESS_TOKEN')}",
+    }
+
+    url = f"https://graph.facebook.com/{os.getenv('VERSION')}/{os.getenv('PHONE_NUMBER_ID')}/messages"
+
+    response = requests.post(url, data=data, headers=headers)
+    if response.status_code == 200:
+        print("Status:", response.status_code)
+        print("Content-type:", response.headers["content-type"])
+        print("Body:", response.text)
+        return response
+    else:
+        print(response.status_code)
+        print(response.text)
+        return response
