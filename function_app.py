@@ -39,10 +39,11 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
         # # Parse the incoming message from WhatsApp
         req_body = req.get_json()
-        message = req_body['messages'][0]['text']['body']
+        message = req_body['entry'][0]['changes'][0]['value']['messages'][0]
+        message_body = message['text']['body']
         
         try:
-            lgph_response = get_response(message)
+            lgph_response = get_response(message_body)
         except Exception as e:
             logger.info(f"Error {e}")
             response_payload = {
@@ -58,7 +59,7 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
         response_payload = {
             "recipient_type": "individual",
-            "to": req_body['messages'][0]['from'],
+            "to": message['from'],
             "type": "text",
             "text": {
                 "body": wpp_response.json()
