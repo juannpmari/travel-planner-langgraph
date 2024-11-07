@@ -75,12 +75,9 @@ def get_response(message):
 
     from agent_graph.graph import graph_factory, compile_workflow
 
-    thread_id = '4' #str(uuid.uuid4())
+    thread_id = '1' #str(uuid.uuid4())
     config = {
         "configurable": {
-            # The passenger_id is used in our flight tools to
-            # fetch the user's flight information
-            "passenger_id": "3442 587242",
             # Checkpoints are accessed by thread_id
             "thread_id": thread_id,
         }
