@@ -22,7 +22,9 @@ class State(TypedDict):
         list[
             Literal[
                 "primary_assistant", #primary assistant
-                "generate_recommendations", #recommendations assistant
+                "generate_recommendations", #recommendations assistant,
+                "services_assistant",
+                "accomodation_assistant"
             ]
         ],
         update_dialog_stack,
