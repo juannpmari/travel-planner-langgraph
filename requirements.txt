@@ -13,3 +13,5 @@ langchain-text-splitters==0.2.0
 langgraph==0.2.3
 langgraph-checkpoint==1.0.2
 langsmith==0.1.117
+pymongo==4.10.1
+python-telegram-bot==13.15

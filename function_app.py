@@ -1,86 +1,62 @@
-import json
+# import json
 import os
 
-import requests
+# import requests
 import azure.functions as func
 
 import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-
+from telegram import Bot
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+bot = Bot(token=TELEGRAM_BOT_TOKEN)
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-@app.route(route="message")
-def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
-    logger.info('Welcome to the travel assistant')
+@app.route(route="message", methods=["POST", "GET"])
+def telegram_webhook(req: func.HttpRequest) -> func.HttpResponse:
+    logger.info('Received a request from Telegram')
 
-    # Check if the request is a GET request for verification
-    if req.method == 'GET':
-        logger.info("got GET request")
-        mode = req.params.get('hub.mode')
-        token = req.params.get('hub.verify_token')
-        challenge = req.params.get('hub.challenge')
-
-        # Replace 'your_verify_token' with the token you've set up in the Meta Developer settings
-        if mode == 'subscribe' and token == '123456':
-            # Respond with the challenge to verify the webhook
-            return func.HttpResponse(challenge, status_code=200)
-        else:
-            # If token doesn't match or other issues, return a 403 Forbidden response
-            return func.HttpResponse('Verification token mismatch', status_code=403)
-
-    # Handle POST requests here (i.e., messages from WhatsApp)
     if req.method == 'POST':
-        logger.info("got POST request")
-        logger.info("printing json")
-        logger.info(req.get_json())
-
-        # # Parse the incoming message from WhatsApp
-        req_body = req.get_json()
-        message = req_body['entry'][0]['changes'][0]['value']['messages'][0]
-        message_body = message['text']['body']
-        
+        # Parse the incoming update from Telegram
         try:
-            lgph_response = get_response(message_body)
+            update = req.get_json()
+            logger.info(f"Received update: {update}")
+
+            # Process the update
+            handle_update(update)
+
+            # Respond with HTTP 200 OK
+            return func.HttpResponse(status_code=200)
         except Exception as e:
-            logger.info(f"Error {e}")
-            response_payload = {
-                "message":f"Error {e}"
-            }
-            return func.HttpResponse(json.dumps(response_payload), mimetype="application/json", status_code=500)
-  
-        data = get_text_message_input(
-            recipient=os.getenv('RECIPIENT_WAID'), text = lgph_response
-        )
+            logger.error(f"Error processing update: {e}")
+            return func.HttpResponse(status_code=500)
+    else:
+        # For webhook setup verification
+        return func.HttpResponse("Hello, Telegram!", status_code=200)
 
-        wpp_response = send_message(data)
+def handle_update(update):
+    # Check if the update has a message
+    if 'message' in update:
+        message = update['message']
+        chat_id = message['chat']['id']
+        message_text = message.get('text', '')
 
-        response_payload = {
-            "recipient_type": "individual",
-            "to": message['from'],
-            "type": "text",
-            "text": {
-                "body": wpp_response.json()
-            }
-        }
+        # Process the message and get a response
+        response_text = get_response(message_text)
 
-        logger.info(f"Sending response: {response_payload}")
-
-        return func.HttpResponse(json.dumps(response_payload), mimetype="application/json", status_code=200)
+        # Send a message back to the user
+        bot.send_message(chat_id=chat_id, text=response_text)
 
 
-def get_response(message):
+def get_response(message:str):
 
     from agent_graph.graph import graph_factory, compile_workflow
 
-    thread_id = '4' #str(uuid.uuid4())
+    thread_id = '1' #str(uuid.uuid4())
     config = {
         "configurable": {
-            # The passenger_id is used in our flight tools to
-            # fetch the user's flight information
-            "passenger_id": "3442 587242",
             # Checkpoints are accessed by thread_id
             "thread_id": thread_id,
         }
@@ -111,35 +87,3 @@ def get_response(message):
         agent_response = str(event.get('messages')[-1].content)
 
     return agent_response
-
-
-def get_text_message_input(recipient, text):
-    return json.dumps(
-        {
-            "messaging_product": "whatsapp",
-            "recipient_type": "individual",
-            "to": recipient,
-            "type": "text",
-            "text": {"preview_url": False, "body": text},
-        }
-    )
-
-
-def send_message(data):
-    headers = {
-        "Content-type": "application/json",
-        "Authorization": f"Bearer {os.getenv('ACCESS_TOKEN')}",
-    }
-
-    url = f"https://graph.facebook.com/{os.getenv('VERSION')}/{os.getenv('PHONE_NUMBER_ID')}/messages"
-
-    response = requests.post(url, data=data, headers=headers)
-    if response.status_code == 200:
-        print("Status:", response.status_code)
-        print("Content-type:", response.headers["content-type"])
-        print("Body:", response.text)
-        return response
-    else:
-        print(response.status_code)
-        print(response.text)
-        return response

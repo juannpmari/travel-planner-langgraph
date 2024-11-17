@@ -63,7 +63,8 @@ def create_primary_graph():
     ) -> Literal[
         "primary_assistant",
         "generate_recommendations",
-        "services_assistant"
+        "services_assistant",
+        "accomodation_assistant"
     ]:
         """If we are in a delegated state, route directly to the appropriate assistant."""
         dialog_state = state.get("dialog_state") #TODO: Get dialog_states from enum
