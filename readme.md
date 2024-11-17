@@ -11,11 +11,11 @@ This project consists of a Telegram chatbot intended  to help users plan their t
 * The bot performance is continously evaluated using Langsmith, by analyzing each agent on it's own, allowing the improvement of each indivual component.
 
 ## Architecture
-The system is based on the supervisor design pattern, widely used for multi-agent apps. It's composed of a primary assistant, that receives users' queries and, based on it's content, it can:
-* use it's own tools to generate the answer
-* delegate the task to recommendations assistant: if the user wants general recommendations about touristic places, itineraries, attraction, etc. Example queries that would follow this flow:
+The system is based on the supervisor design pattern, widely used for multi-agent apps. It's composed of a primary assistant, that receives users' queries and, based on its content, it can:
+  * use its own tools to generate the answer
+  * delegate the task to recommendations assistant: if the user wants general recommendations about touristic places, itineraries, attraction, etc. Example queries that would follow this flow:
     ** I have 2 days to visit Paris, what should i prioritize?
-* delegate the task to the services assistant: if the user is requesting information about services, like accomodation, flights, tours, etc.
+  * delegate the task to the services assistant: if the user is requesting information about services, like accommodation, flights, tours, etc.
     ** where can I stay in New York with a low budget?
 
 The sevices assistant will take the query and:
