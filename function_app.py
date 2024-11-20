@@ -44,17 +44,17 @@ def handle_update(update):
         message_text = message.get('text', '')
 
         # Process the message and get a response
-        response_text = get_response(message_text)
+        response_text = get_response(message_text,chat_id)
 
         # Send a message back to the user
         bot.send_message(chat_id=chat_id, text=response_text)
 
 
-def get_response(message:str):
+def get_response(message:str, chat_id:str):
 
     from agent_graph.graph import graph_factory, compile_workflow
 
-    thread_id = '1' #str(uuid.uuid4())
+    thread_id = chat_id #str(uuid.uuid4())
     config = {
         "configurable": {
             # Checkpoints are accessed by thread_id
