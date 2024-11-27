@@ -3,7 +3,7 @@
 ## Description
 This project consists of a Telegram chatbot intended  to help users plan their trips, using information about the user's background, interests, schedule and budget, among others, to give personalized recommendations about places to visit and suggest day-by-day itineraries, as well as offer help finding accomodation services, tours and flights.
 
-Talk to the bot: https://t.me/TravelPlannerARBot
+Talk to the bot on Telegram: https://t.me/TravelPlannerARBot
 
 ## Tech stack
 * [Langgraph](https://www.langchain.com/langgraph) was the framework chosen to build the multi-agent architecture, due to it's flexibility to add, edit and remove agents and connections between them.
