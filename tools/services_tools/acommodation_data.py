@@ -11,4 +11,4 @@ def get_acommodation_data(query:str):
     Args:
         query: pandas' dataframe formatted query, to filter acommodation data according to user needs. For example, query = "city in ['London','Paris']"
     """
-    return acommodation_df.query(query)
+    return str(acommodation_df.query(query).to_json())
