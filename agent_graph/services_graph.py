@@ -10,6 +10,7 @@ from llm_utils.utils import create_tool_node_with_fallback
 from tools.flow_tools import CompleteOrEscalate, ToAccomodationAssistant
 from llm_utils.entry_node import create_entry_node
 from states.state import State    
+from tools.services_tools.packages_data import get_packages_data
 
 
 
@@ -25,7 +26,7 @@ def create_services_subgraph(builder):
     builder.add_edge("enter_services_assistant", "services_assistant")
     builder.add_node(
         "services_assistant_tools",
-        create_tool_node_with_fallback([]), #TODO: add tools to get packages and extra services
+        create_tool_node_with_fallback([get_packages_data]), #TODO: add tools to get packages and extra services
     )
 
     def route_retrieve_services(
