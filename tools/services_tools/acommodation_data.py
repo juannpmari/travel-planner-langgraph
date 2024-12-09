@@ -1,5 +1,4 @@
 from langchain_core.tools import tool
-from pydantic import BaseModel
 import pandas as pd
 
 acommodation_df = pd.read_csv('data/acommodation_data.csv')
