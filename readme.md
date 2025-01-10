@@ -21,8 +21,8 @@ The system is based on the supervisor design pattern, widely used for multi-agen
     ** where can I stay in New York with a low budget?
 
 The sevices assistant will take the query and:
-* use it's own tools
-* delegate the task to the specialized agents, each one specific for a type of service (NOTE: so far only the accomodation asssistant is implemented)
+* Use it's own tools
+* Delegate the task to the specialized agents, each one specific for a type of service (NOTE: so far only the accomodation asssistant is implemented)
 
 Each time the user sends a message, the conversation is resumed by the agent where it left, thanks to the definition of the Langgraph state.
 Each agent can retun the conversation back to the primary assistant once it finished it's task.
